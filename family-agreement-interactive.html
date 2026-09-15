@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Build Your Family Agreement — Parental Advisory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Yatra+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF4E9;
+    --paper-2:#F3E9D6;
+    --ink:#241F35;
+    --ink-soft:#4A4360;
+    --marigold:#E8A13A;
+    --marigold-deep:#C8801C;
+    --pine:#2F7D5B;
+    --pine-deep:#215C41;
+    --line:#D9CDB6;
+    --sticker:#17141F;
+    --white:#FFFDF8;
+    --shadow: 8px 8px 0 rgba(36,31,53,.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Libre Baskerville", Georgia, serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---------- Masthead ---------- */
+  .mast{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .sticker{
+    background:var(--sticker);color:#fff;border:3px solid var(--sticker);
+    padding:6px 10px 7px;line-height:1;display:inline-flex;flex-direction:column;align-items:center;
+    font-family:"Urbanist",system-ui,sans-serif;font-weight:900;letter-spacing:.02em;flex:none;
+  }
+  .sticker b{font-size:15px;}
+  .sticker span{font-size:8.5px;font-weight:800;letter-spacing:.14em;margin-top:2px;}
+  h1{
+    font-family:"Urbanist",system-ui,sans-serif;font-weight:900;
+    font-size:clamp(30px,7vw,46px);line-height:.98;margin:0;letter-spacing:-.01em;
+  }
+  .tagline{font-style:italic;color:var(--ink-soft);margin:2px 0 22px;font-size:16px;}
+
+  /* ---------- Progress ---------- */
+  .steps{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:12px 0;}
+  .steps button{
+    font-family:"Urbanist",sans-serif;font-weight:700;font-size:12.5px;
+    background:transparent;border:none;color:var(--ink-soft);cursor:pointer;padding:5px 9px;border-radius:20px;
+    display:flex;align-items:center;gap:7px;transition:background .15s,color .15s;
+  }
+  .steps button .n{
+    width:20px;height:20px;border-radius:50%;background:var(--paper-2);color:var(--ink);
+    display:grid;place-items:center;font-size:11px;border:1.5px solid var(--line);flex:none;
+  }
+  .steps button[aria-current="true"]{background:var(--ink);color:var(--white);}
+  .steps button[aria-current="true"] .n{background:var(--marigold);border-color:var(--marigold);color:var(--sticker);}
+  .steps button.done .n{background:var(--pine);border-color:var(--pine);color:#fff;}
+  .steps button:hover:not([aria-current="true"]){color:var(--ink);}
+
+  /* ---------- Panels ---------- */
+  .panel{display:none;animation:none;}
+  .panel.active{display:block;}
+  @media (prefers-reduced-motion:no-preference){
+    .panel.active{animation:rise .28s ease both;}
+    @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  }
+  .eyebrow{font-family:"Urbanist",sans-serif;font-weight:800;color:var(--marigold-deep);font-size:13px;letter-spacing:.02em;margin:0 0 4px;}
+  h2{font-family:"Yatra One",serif;font-weight:400;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0 0 8px;}
+  .lead{margin:0 0 6px;}
+  .coach{
+    background:var(--white);border-left:5px solid var(--marigold);padding:12px 16px;margin:16px 0 22px;
+    font-size:14.5px;color:var(--ink-soft);border-radius:0 8px 8px 0;
+  }
+  .coach strong{color:var(--ink);}
+
+  label.field-label{display:block;font-family:"Urbanist",sans-serif;font-weight:700;font-size:14px;margin:18px 0 8px;}
+  input[type=text], textarea{
+    width:100%;font-family:"Libre Baskerville",serif;font-size:15px;color:var(--ink);
+    background:var(--white);border:2px solid var(--line);border-radius:10px;padding:11px 13px;
+  }
+  textarea{resize:vertical;min-height:74px;line-height:1.5;}
+  input[type=text]:focus, textarea:focus{outline:3px solid rgba(232,161,58,.45);outline-offset:1px;border-color:var(--marigold);}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin:4px 0 4px;}
+  .chip{
+    font-family:"Urbanist",sans-serif;font-weight:600;font-size:13.5px;cursor:pointer;user-select:none;
+    background:var(--white);border:2px solid var(--line);color:var(--ink);padding:8px 14px;border-radius:22px;transition:.12s;
+  }
+  .chip:hover{border-color:var(--ink-soft);}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+  /* safety-line checklist */
+  .safety{background:var(--white);border:2px solid var(--pine);border-radius:12px;padding:6px 4px;margin-top:6px;}
+  .safety .row{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border-bottom:1px solid var(--line);}
+  .safety .row:last-child{border-bottom:none;}
+  .safety .mark{flex:none;width:22px;height:22px;border-radius:6px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:900;margin-top:1px;font-family:"Urbanist",sans-serif;}
+  .safety .txt{font-size:15px;}
+  .ack{display:flex;gap:11px;align-items:center;margin-top:12px;font-size:14.5px;font-family:"Urbanist",sans-serif;font-weight:600;}
+  .ack input{width:20px;height:20px;accent-color:var(--pine);flex:none;}
+
+  /* dynamic rows */
+  .rows{margin-top:8px;display:flex;flex-direction:column;gap:10px;}
+  .row-item{display:flex;gap:8px;align-items:stretch;}
+  .row-item input{flex:1;}
+  .ifthen{display:flex;gap:8px;align-items:stretch;}
+  .ifthen .seg{flex:1;position:relative;}
+  .ifthen .tag{position:absolute;top:-9px;left:11px;background:var(--paper);padding:0 6px;font-family:"Urbanist",sans-serif;font-weight:800;font-size:10.5px;letter-spacing:.1em;color:var(--marigold-deep);}
+  .del{flex:none;background:transparent;border:2px solid var(--line);border-radius:10px;color:var(--ink-soft);width:42px;cursor:pointer;font-size:18px;line-height:1;}
+  .del:hover{border-color:#B4453A;color:#B4453A;}
+  .add{
+    margin-top:10px;font-family:"Urbanist",sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;
+    background:transparent;border:2px dashed var(--line);border-radius:10px;padding:9px 14px;color:var(--ink);width:100%;
+  }
+  .add:hover{border-color:var(--marigold);color:var(--marigold-deep);}
+
+  /* override step */
+  .override{background:var(--sticker);color:#F6EFE1;border-radius:14px;padding:22px 22px 8px;margin:8px 0 4px;}
+  .override h3{font-family:"Yatra One",serif;font-weight:400;font-size:22px;margin:0 0 8px;color:#fff;}
+  .override .big{font-family:"Urbanist",sans-serif;font-weight:800;font-size:19px;line-height:1.35;color:var(--marigold);margin:0 0 6px;}
+  .override p{font-size:14.5px;color:#D9D2E4;}
+  .override .mini-label{color:#B7AFC9;font-family:"Urbanist",sans-serif;font-weight:700;font-size:12.5px;margin-top:14px;}
+  .override input[type=text]{background:#2E2942;border-color:#443E5C;color:#fff;}
+  .override input[type=text]:focus{border-color:var(--marigold);}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px;padding-top:18px;border-top:2px solid var(--line);}
+  .btn{
+    font-family:"Urbanist",sans-serif;font-weight:800;font-size:15px;cursor:pointer;border-radius:12px;padding:13px 22px;border:2px solid var(--ink);
+    background:var(--ink);color:var(--white);transition:.15s;
+  }
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--marigold);}
+  .btn.ghost{background:transparent;color:var(--ink);}
+  .btn.ghost:hover{box-shadow:3px 3px 0 var(--line);}
+  .btn.go{background:var(--pine);border-color:var(--pine);}
+  .btn.go:hover{box-shadow:3px 3px 0 var(--pine-deep);}
+  .btn[disabled]{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+  .saved{font-family:"Urbanist",sans-serif;font-size:12px;color:var(--pine);font-weight:700;align-self:center;opacity:0;transition:opacity .3s;}
+  .saved.show{opacity:1;}
+
+  /* ---------- Final agreement ---------- */
+  .doc{background:var(--white);border:2px solid var(--ink);border-radius:6px;padding:34px 32px;box-shadow:var(--shadow);}
+  .doc .doc-head{text-align:center;border-bottom:3px double var(--ink);padding-bottom:16px;margin-bottom:20px;}
+  .doc .doc-head .sticker{margin:0 auto 12px;}
+  .doc h2{font-family:"Urbanist",sans-serif;font-weight:900;font-size:30px;margin:0;}
+  .doc .who{font-style:italic;color:var(--ink-soft);margin-top:4px;}
+  .doc section{margin:0 0 20px;}
+  .doc section h3{font-family:"Urbanist",sans-serif;font-weight:800;font-size:13px;letter-spacing:.06em;color:var(--marigold-deep);border-bottom:1px solid var(--line);padding-bottom:5px;margin:0 0 10px;}
+  .doc ul{margin:0;padding-left:20px;}
+  .doc li{margin:5px 0;}
+  .doc .ifline{margin:6px 0;}
+  .doc .ifline b{color:var(--pine-deep);}
+  .doc .ovbox{background:var(--paper-2);border-radius:10px;padding:14px 16px;font-size:15px;}
+  .doc .ovbox strong{display:block;font-family:"Urbanist",sans-serif;font-size:16px;margin-bottom:4px;}
+  .sig{display:flex;flex-wrap:wrap;gap:24px;margin-top:26px;border-top:2px solid var(--ink);padding-top:18px;}
+  .sig .one{flex:1;min-width:180px;}
+  .sig .line{font-family:"Yatra One",serif;font-size:22px;border-bottom:1.5px solid var(--ink);padding-bottom:2px;min-height:30px;}
+  .sig .cap{font-family:"Urbanist",sans-serif;font-size:11.5px;letter-spacing:.05em;color:var(--ink-soft);margin-top:5px;}
+  .revisit{text-align:center;font-style:italic;color:var(--ink-soft);margin-top:22px;font-size:14px;}
+  .empty-note{color:var(--ink-soft);font-style:italic;}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px;}
+
+  /* ---------- Print ---------- */
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:none;padding:0;}
+    .mast,.tagline,.steps,.nav,.toolbar,.saved,.panel:not(.active){display:none !important;}
+    .doc{border:none;box-shadow:none;padding:0;}
+    .override{background:#fff;color:#000;border:2px solid #000;}
+    .override h3,.override .big{color:#000;}
+    .override p,.override .mini-label{color:#333;}
+  }
+  @media (max-width:520px){
+    .ifthen{flex-direction:column;}
+    .steps button .lbl{display:none;}
+    .steps button{padding:5px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast" id="topMast">
+    <span class="sticker" aria-hidden="true"><b>PARENTAL</b><span>ADVISORY · MADE TOGETHER</span></span>
+    <h1>Build Your Family Agreement</h1>
+  </div>
+  <p class="tagline">A guided worksheet to fill in together — one adult, one young person, side by side. About 15–20 minutes.</p>
+
+  <nav class="steps" id="stepNav" aria-label="Worksheet steps"></nav>
+
+  <!-- STEP 0: SETUP -->
+  <section class="panel" data-step="0">
+    <p class="eyebrow">Before you start</p>
+    <h2>Who's making this agreement?</h2>
+    <p class="lead">This works best out loud, together. One person can type while you both talk it through. You can stop and come back — your answers save as you go.</p>
+    <div class="coach">The most protective thing research points to isn't a longer list of rules or a warmer heart — it's <strong>both at once</strong>. This worksheet helps you write down the rules <em>and</em> the reasons, together.</div>
+    <label class="field-label" for="household">Our household / family name</label>
+    <input type="text" id="household" data-key="household" placeholder="e.g., The Rivera family" />
+    <label class="field-label" for="youth">The young person / people</label>
+    <input type="text" id="youth" data-key="youth" placeholder="e.g., Mateo" />
+    <label class="field-label" for="adults">The grown-up(s)</label>
+    <input type="text" id="adults" data-key="adults" placeholder="e.g., Mom & Tío Luis" />
+  </section>
+
+  <!-- STEP 1: VALUES -->
+  <section class="panel" data-step="1">
+    <p class="eyebrow">Step 1 of 6</p>
+    <h2>What we care about</h2>
+    <p class="lead">Start here, not with the rules. Tap the ones that fit your family, add your own, then finish the sentence below.</p>
+    <div class="coach">When a young person understands the <strong>why</strong>, the rules stop feeling random — and they're far harder to rebel against than a rule that's just "because I said so."</div>
+    <div class="chips" data-chipset="values" role="group" aria-label="Values"></div>
+    <label class="field-label" for="valueLine">In our family, we care most about…</label>
+    <textarea id="valueLine" data-key="valueLine" placeholder="Finish the sentence in your own words."></textarea>
+  </section>
+
+  <!-- STEP 2: EXPECTATIONS -->
+  <section class="panel" data-step="2">
+    <p class="eyebrow">Step 2 of 6</p>
+    <h2>What that looks like day to day</h2>
+    <p class="lead">Turn those values into everyday expectations — broad and positive. Tap any that fit, and add your own.</p>
+    <div class="coach">These aren't punishments-in-waiting. They're the ordinary habits that keep a family connected and safe.</div>
+    <div class="chips" data-chipset="expect" role="group" aria-label="Expectations"></div>
+    <div class="rows" data-rows="expect"></div>
+    <button class="add" data-add="expect" type="button">+ Add our own expectation</button>
+  </section>
+
+  <!-- STEP 3: RULES -->
+  <section class="panel" data-step="3">
+    <p class="eyebrow">Step 3 of 6</p>
+    <h2>The rules</h2>
+    <p class="lead">Every family sets its own rules. But these safety lines are the floor — read each one out loud and talk about the why.</p>
+    <div class="safety" id="safetyList" aria-label="Safety lines"></div>
+    <div class="ack">
+      <input type="checkbox" id="safetyAck" data-key="safetyAck" />
+      <label for="safetyAck">We read the safety lines together and we agree to them.</label>
+    </div>
+    <label class="field-label">Our own rules — decide these together</label>
+    <p class="lead" style="font-size:14px;color:var(--ink-soft);margin-top:-2px;">Curfew, screens, check-ins, where you can go. This is the part you negotiate — the young person gets a real say here.</p>
+    <div class="rows" data-rows="rules"></div>
+    <button class="add" data-add="rules" type="button">+ Add a family rule</button>
+  </section>
+
+  <!-- STEP 4: CONSEQUENCES -->
+  <section class="panel" data-step="4">
+    <p class="eyebrow">Step 4 of 6</p>
+    <h2>What happens if a line is crossed</h2>
+    <p class="lead">Agree on these now — calm, together — so no one is surprised later. Write them as "if this, then that."</p>
+    <div class="coach">Consequences work best when they're <strong>predictable, related to what happened, proportionate, and delivered calmly</strong> — then followed by repair. Consistency matters more than harshness. A consequence is meant to teach, not to make someone suffer.</div>
+    <div class="rows" data-rows="conseq"></div>
+    <button class="add" data-add="conseq" type="button">+ Add an "if / then"</button>
+  </section>
+
+  <!-- STEP 5: SAFETY OVERRIDE -->
+  <section class="panel" data-step="5">
+    <p class="eyebrow">Step 5 of 6</p>
+    <h2>The one rule above all the others</h2>
+    <div class="override">
+      <h3>The Safety Override</h3>
+      <p class="big">"If you're ever unsafe, call. You will not be in trouble for calling."</p>
+      <p>A young person who fears the consequence more than the danger will stay in the danger. This rule outranks every other one on the page. Anything else gets talked about later — once everyone is safe and calm.</p>
+      <p class="mini-label">Our code word or phrase <span style="font-weight:400;color:#9a92ad;">— a text that means "come get me, no questions in front of everyone"</span></p>
+      <input type="text" data-key="codeword" placeholder='e.g., "Can you grab some Mountain Dew?"' />
+      <p class="mini-label">Who to call — trusted adult 1</p>
+      <input type="text" data-key="trusted1" placeholder="Name & number" />
+      <p class="mini-label">Trusted adult 2</p>
+      <input type="text" data-key="trusted2" placeholder="Name & number" />
+      <div style="height:14px"></div>
+    </div>
+    <div class="ack">
+      <input type="checkbox" id="overrideAck" data-key="overrideAck" />
+      <label for="overrideAck">We both agree: a call for help is always safe to make.</label>
+    </div>
+  </section>
+
+  <!-- STEP 6: RECOGNITION -->
+  <section class="panel" data-step="6">
+    <p class="eyebrow">Step 6 of 6</p>
+    <h2>Catching it right</h2>
+    <p class="lead">Rules get the attention, but noticing good choices shapes behavior just as powerfully — and most families do it too little.</p>
+    <div class="coach">Be specific. Instead of "good job," <strong>describe what you saw</strong>: "You texted me when your plans changed — that's why I trust you with a later curfew." And let trust buy freedom: responsibility shown → independence extended.</div>
+    <label class="field-label" for="rec1">One way we'll notice and name good choices:</label>
+    <textarea id="rec1" data-key="rec1" placeholder="e.g., We'll say it out loud at dinner when someone makes a hard, honest call."></textarea>
+    <label class="field-label" for="rec2">As trust grows, more freedom could look like:</label>
+    <textarea id="rec2" data-key="rec2" placeholder="e.g., A later curfew, more say in weekend plans, driving friends."></textarea>
+    <label class="field-label" for="revisit">Let's revisit this agreement on:</label>
+    <input type="text" id="revisit" data-key="revisit" placeholder="e.g., the first weekend of winter break" />
+  </section>
+
+  <!-- FINAL -->
+  <section class="panel" data-step="7">
+    <p class="eyebrow">Your agreement</p>
+    <h2 style="font-family:'Urbanist';font-weight:900;">Read it back, then sign</h2>
+    <p class="lead">Look it over together. Type each name to sign. Then print it or save it somewhere you'll both see it.</p>
+    <div class="doc" id="finalDoc"></div>
+    <div class="toolbar">
+      <button class="btn go" type="button" onclick="window.print()">Print / Save as PDF</button>
+      <button class="btn ghost" type="button" id="downloadBtn">Download a copy</button>
+      <button class="btn ghost" type="button" id="resetBtn">Start over</button>
+    </div>
+    <p class="revisit">A family agreement is a living document. Come back to it as your young person grows and trust expands.</p>
+  </section>
+
+  <div class="nav">
+    <button class="btn ghost" id="backBtn" type="button">Back</button>
+    <span class="saved" id="savedFlag">Saved</span>
+    <button class="btn" id="nextBtn" type="button">Next</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- storage (safe, with in-memory fallback) ---------------- */
+  var KEY="familyAgreement.v1";
+  var mem={};
+  var store={
+    async get(){
+      try{
+        if(window.storage && window.storage.get){
+          var r=await window.storage.get(KEY,false);
+          return r && r.value ? JSON.parse(r.value) : null;
+        }
+      }catch(e){/* not found or unavailable */}
+      return mem[KEY]||null;
+    },
+    async set(obj){
+      var val=JSON.stringify(obj);
+      mem[KEY]=obj;
+      try{
+        if(window.storage && window.storage.set){ await window.storage.set(KEY,val,false); }
+      }catch(e){/* ignore, mem holds it for the session */}
+    },
+    async clear(){
+      mem[KEY]=null;
+      try{ if(window.storage && window.storage.delete){ await window.storage.delete(KEY,false); } }catch(e){}
+    }
+  };
+
+  /* ---------------- state ---------------- */
+  var state={
+    household:"",youth:"",adults:"",
+    values:[], valueLine:"",
+    expectChips:[], expect:[],
+    safetyAck:false, rules:[],
+    conseq:[],
+    codeword:"",trusted1:"",trusted2:"",overrideAck:false,
+    rec1:"",rec2:"",revisit:"",
+    signYouth:"",signAdult:"",signDate:""
+  };
+
+  var VALUE_CHIPS=["Health & our brains","Safety","Honesty","Trust","Looking out for each other","Faith & family values","School, sports & future goals","Mental health"];
+  var EXPECT_CHIPS=["We tell each other where we are","We're honest, even when it's hard","We answer each other's texts","We don't ride with someone who's been drinking","We ask for help early"];
+  var SAFETY_LINES=[
+    "No alcohol",
+    "No nicotine or vaping",
+    "No cannabis",
+    "No pills or medications that weren't prescribed to you",
+    "No riding with an impaired driver",
+    "No staying where dangerous substance use is happening",
+    "Always call for help if someone may be overdosing or medically unsafe"
+  ];
+  var STEP_LABELS=["Start","Values","Expectations","Rules","Consequences","Safety","Recognition","Sign"];
+  var LAST=7;
+  var step=0;
+
+  /* ---------------- helpers ---------------- */
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+  var saveTimer=null;
+  function flagSaved(){
+    var f=$("#savedFlag"); if(!f) return;
+    f.classList.add("show");
+    clearTimeout(f._t); f._t=setTimeout(function(){f.classList.remove("show");},1100);
+  }
+  function persist(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(function(){ store.set(state); flagSaved(); },250);
+  }
+
+  /* ---------------- build progress nav ---------------- */
+  function buildNav(){
+    var nav=$("#stepNav"); nav.innerHTML="";
+    STEP_LABELS.forEach(function(lbl,i){
+      var b=document.createElement("button");
+      b.type="button";
+      b.innerHTML='<span class="n">'+(i===0?'✦':i)+'</span><span class="lbl">'+lbl+'</span>';
+      b.addEventListener("click",function(){ go(i); });
+      nav.appendChild(b);
+    });
+  }
+  function syncNav(){
+    $$("#stepNav button").forEach(function(b,i){
+      b.setAttribute("aria-current", i===step ? "true":"false");
+      b.classList.toggle("done", i<step);
+    });
+  }
+
+  /* ---------------- chips ---------------- */
+  function renderChips(set, list, arrKey){
+    var host=$('[data-chipset="'+set+'"]'); if(!host) return;
+    host.innerHTML="";
+    list.forEach(function(txt){
+      var c=document.createElement("button");
+      c.type="button"; c.className="chip"; c.textContent=txt;
+      var on=state[arrKey].indexOf(txt)>-1;
+      c.setAttribute("aria-pressed", on?"true":"false");
+      c.addEventListener("click",function(){
+        var idx=state[arrKey].indexOf(txt);
+        if(idx>-1){state[arrKey].splice(idx,1);c.setAttribute("aria-pressed","false");}
+        else{state[arrKey].push(txt);c.setAttribute("aria-pressed","true");}
+        persist();
+      });
+      host.appendChild(c);
+    });
+  }
+
+  /* ---------------- dynamic rows ---------------- */
+  function renderRows(kind){
+    var host=$('[data-rows="'+kind+'"]'); if(!host) return;
+    host.innerHTML="";
+    state[kind].forEach(function(item,i){
+      var wrap=document.createElement("div");
+      if(kind==="conseq"){
+        wrap.className="ifthen";
+        wrap.innerHTML=
+          '<div class="seg"><span class="tag">IF…</span><input type="text" placeholder="a rule is broken"></div>'+
+          '<div class="seg"><span class="tag">THEN…</span><input type="text" placeholder="what happens (calm, related, agreed)"></div>';
+        var ins=$$("input",wrap);
+        ins[0].value=item.iff||""; ins[1].value=item.then||"";
+        ins[0].addEventListener("input",function(){state.conseq[i].iff=this.value;persist();});
+        ins[1].addEventListener("input",function(){state.conseq[i].then=this.value;persist();});
+        var d=document.createElement("button");d.className="del";d.type="button";d.setAttribute("aria-label","Remove");d.innerHTML="&times;";
+        d.addEventListener("click",function(){state.conseq.splice(i,1);renderRows("conseq");persist();});
+        wrap.appendChild(d);
+      } else {
+        wrap.className="row-item";
+        var inp=document.createElement("input");inp.type="text";
+        inp.placeholder = kind==="rules" ? "e.g., Home by 10 on school nights" : "e.g., We eat dinner together on Sundays";
+        inp.value=item;
+        inp.addEventListener("input",function(){state[kind][i]=this.value;persist();});
+        var d=document.createElement("button");d.className="del";d.type="button";d.setAttribute("aria-label","Remove");d.innerHTML="&times;";
+        d.addEventListener("click",function(){state[kind].splice(i,1);renderRows(kind);persist();});
+        wrap.appendChild(inp);wrap.appendChild(d);
+      }
+      host.appendChild(wrap);
+    });
+  }
+
+  function renderSafety(){
+    var host=$("#safetyList"); host.innerHTML="";
+    SAFETY_LINES.forEach(function(t){
+      var row=document.createElement("div");row.className="row";
+      row.innerHTML='<span class="mark" aria-hidden="true">✓</span><span class="txt">'+t+'</span>';
+      host.appendChild(row);
+    });
+  }
+
+  /* ---------------- bind simple inputs ---------------- */
+  function bindInputs(){
+    $$("[data-key]").forEach(function(el){
+      var k=el.getAttribute("data-key");
+      if(el.type==="checkbox"){
+        el.checked=!!state[k];
+        el.addEventListener("change",function(){state[k]=el.checked;persist();});
+      } else {
+        el.value=state[k]||"";
+        el.addEventListener("input",function(){state[k]=el.value;persist();});
+      }
+    });
+  }
+
+  /* ---------------- add buttons ---------------- */
+  function bindAdders(){
+    $$("[data-add]").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var kind=btn.getAttribute("data-add");
+        if(kind==="conseq"){state.conseq.push({iff:"",then:""});}
+        else{state[kind].push("");}
+        renderRows(kind);persist();
+        var host=$('[data-rows="'+kind+'"]');
+        var last=host.lastElementChild; if(last){var i=$("input",last); if(i)i.focus();}
+      });
+    });
+  }
+
+  /* ---------------- panels / nav ---------------- */
+  function showPanel(){
+    $$(".panel").forEach(function(p){
+      p.classList.toggle("active", Number(p.getAttribute("data-step"))===step);
+    });
+    $("#backBtn").disabled = step===0;
+    var next=$("#nextBtn");
+    if(step===LAST){ next.style.display="none"; }
+    else { next.style.display=""; next.textContent = step===LAST-1 ? "See our agreement" : "Next"; }
+    syncNav();
+    if(step===LAST) renderDoc();
+    window.scrollTo({top:0,behavior: matchMedia('(prefers-reduced-motion:no-preference)').matches ? 'smooth':'auto'});
+  }
+  function go(n){ step=Math.max(0,Math.min(LAST,n)); showPanel(); }
+
+  /* ---------------- compile final doc ---------------- */
+  function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+  function list(items){
+    var real=items.filter(function(x){return x && String(x).trim();});
+    if(!real.length) return '<p class="empty-note">— none added —</p>';
+    return '<ul>'+real.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';
+  }
+  function renderDoc(){
+    var d=$("#finalDoc");
+    var who=[];
+    if(state.youth) who.push(esc(state.youth));
+    if(state.adults) who.push(esc(state.adults));
+    var values=state.values.slice();
+    if(state.valueLine.trim()) values.push(state.valueLine.trim());
+    var expect=state.expectChips.concat(state.expect);
+    var cons=state.conseq.filter(function(c){return (c.iff&&c.iff.trim())||(c.then&&c.then.trim());});
+
+    var html=""+
+    '<div class="doc-head">'+
+      '<span class="sticker" aria-hidden="true"><b>PARENTAL</b><span>ADVISORY · MADE TOGETHER</span></span>'+
+      '<h2>'+ (state.household?esc(state.household)+"’s ":"") +'Family Agreement</h2>'+
+      (who.length?'<p class="who">Between '+who.join(" &amp; ")+'</p>':'')+
+    '</div>';
+
+    html+='<section><h3>What we care about</h3>'+list(values)+'</section>';
+    html+='<section><h3>What that looks like</h3>'+list(expect)+'</section>';
+
+    html+='<section><h3>Our safety lines'+(state.safetyAck?' ✓ agreed':'')+'</h3><ul>'+
+      SAFETY_LINES.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></section>';
+
+    if(state.rules.filter(function(x){return x&&x.trim();}).length){
+      html+='<section><h3>Our own rules</h3>'+list(state.rules)+'</section>';
+    }
+
+    html+='<section><h3>If a line is crossed</h3>';
+    if(cons.length){
+      html+=cons.map(function(c){return '<p class="ifline"><b>If</b> '+esc(c.iff||"…")+' <b>→ then</b> '+esc(c.then||"…")+'</p>';}).join('');
+    } else { html+='<p class="empty-note">— to be decided together —</p>'; }
+    html+='</section>';
+
+    html+='<section><h3>The safety override — above all other rules</h3><div class="ovbox">'+
+      '<strong>If you\'re ever unsafe, call. You will not be in trouble for calling.</strong>'+
+      (state.codeword?'Our code word: <em>'+esc(state.codeword)+'</em><br>':'')+
+      (state.trusted1?'Call: '+esc(state.trusted1):'')+
+      (state.trusted2?' &nbsp;·&nbsp; or '+esc(state.trusted2):'')+
+      '</div></section>';
+
+    if(state.rec1.trim()||state.rec2.trim()){
+      html+='<section><h3>How we\'ll catch it right</h3>';
+      if(state.rec1.trim()) html+='<p class="ifline">'+esc(state.rec1)+'</p>';
+      if(state.rec2.trim()) html+='<p class="ifline"><b>More freedom as trust grows:</b> '+esc(state.rec2)+'</p>';
+      html+='</section>';
+    }
+
+    html+='<div class="sig">'+
+      '<div class="one"><div class="line" id="sigY">'+esc(state.signYouth)+'</div><div class="cap">Young person'+(state.youth?' — '+esc(state.youth):'')+'</div></div>'+
+      '<div class="one"><div class="line" id="sigA">'+esc(state.signAdult)+'</div><div class="cap">Grown-up'+(state.adults?' — '+esc(state.adults):'')+'</div></div>'+
+      '<div class="one" style="min-width:120px;flex:0 0 130px;"><div class="line" id="sigD">'+esc(state.signDate)+'</div><div class="cap">Date</div></div>'+
+    '</div>';
+
+    if(state.revisit.trim()){
+      html+='<p class="revisit">We\'ll revisit this on: <strong>'+esc(state.revisit)+'</strong></p>';
+    }
+
+    d.innerHTML=html;
+
+    // make signature lines editable in place
+    makeSign("sigY","signYouth","Type name to sign");
+    makeSign("sigA","signAdult","Type name to sign");
+    makeSign("sigD","signDate","Today's date");
+  }
+  function makeSign(id,key,ph){
+    var el=$("#"+id); if(!el) return;
+    el.setAttribute("contenteditable","true");
+    el.setAttribute("role","textbox");
+    el.setAttribute("aria-label",ph);
+    if(!el.textContent.trim()){ el.dataset.ph=ph; }
+    el.addEventListener("focus",function(){ if(el.textContent===ph)el.textContent=""; });
+    el.addEventListener("input",function(){ state[key]=el.textContent.replace(/\n/g,' ').trim(); persist(); });
+  }
+
+  /* ---------------- download ---------------- */
+  function plainText(){
+    var L=[]; var nl="\n";
+    L.push((state.household?state.household+"’s ":"")+"FAMILY AGREEMENT");
+    var who=[state.youth,state.adults].filter(Boolean).join(" & ");
+    if(who) L.push("Between "+who);
+    L.push("");
+    var vals=state.values.concat(state.valueLine.trim()?[state.valueLine.trim()]:[]);
+    L.push("WHAT WE CARE ABOUT");   vals.forEach(function(v){if(v.trim())L.push("  • "+v);});
+    L.push("");
+    L.push("WHAT THAT LOOKS LIKE"); state.expectChips.concat(state.expect).forEach(function(v){if(v&&v.trim())L.push("  • "+v);});
+    L.push("");
+    L.push("SAFETY LINES"+(state.safetyAck?" (agreed)":"")); SAFETY_LINES.forEach(function(v){L.push("  • "+v);});
+    L.push("");
+    var rr=state.rules.filter(function(x){return x&&x.trim();});
+    if(rr.length){L.push("OUR OWN RULES");rr.forEach(function(v){L.push("  • "+v);});L.push("");}
+    var cc=state.conseq.filter(function(c){return (c.iff&&c.iff.trim())||(c.then&&c.then.trim());});
+    if(cc.length){L.push("IF A LINE IS CROSSED");cc.forEach(function(c){L.push("  • If "+(c.iff||"…")+" → then "+(c.then||"…"));});L.push("");}
+    L.push("SAFETY OVERRIDE (ABOVE ALL OTHER RULES)");
+    L.push("  If you're ever unsafe, call. You will not be in trouble for calling.");
+    if(state.codeword)L.push("  Code word: "+state.codeword);
+    if(state.trusted1)L.push("  Call: "+state.trusted1);
+    if(state.trusted2)L.push("  Or: "+state.trusted2);
+    L.push("");
+    if(state.rec1.trim()||state.rec2.trim()){
+      L.push("CATCHING IT RIGHT");
+      if(state.rec1.trim())L.push("  "+state.rec1);
+      if(state.rec2.trim())L.push("  More freedom as trust grows: "+state.rec2);
+      L.push("");
+    }
+    L.push("Signed: "+(state.signYouth||"____________")+"   &   "+(state.signAdult||"____________")+"   Date: "+(state.signDate||"________"));
+    if(state.revisit.trim())L.push("Revisit on: "+state.revisit);
+    return L.join(nl);
+  }
+
+  /* ---------------- init ---------------- */
+  async function init(){
+    var saved=await store.get();
+    if(saved){ Object.keys(state).forEach(function(k){ if(saved[k]!==undefined) state[k]=saved[k]; }); }
+
+    buildNav();
+    renderChips("values",VALUE_CHIPS,"values");
+    renderChips("expect",EXPECT_CHIPS,"expectChips");
+    renderSafety();
+    renderRows("expect"); renderRows("rules"); renderRows("conseq");
+    bindInputs();
+    bindAdders();
+
+    $("#backBtn").addEventListener("click",function(){go(step-1);});
+    $("#nextBtn").addEventListener("click",function(){go(step+1);});
+    $("#downloadBtn").addEventListener("click",function(){
+      var blob=new Blob([plainText()],{type:"text/plain"});
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download=(state.household?state.household.replace(/\s+/g,"_"):"Our")+"_Family_Agreement.txt";
+      document.body.appendChild(a);a.click();a.remove();
+    });
+    $("#resetBtn").addEventListener("click",async function(){
+      if(!confirm("Clear this agreement and start fresh?")) return;
+      await store.clear();
+      location.reload();
+    });
+
+    showPanel();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
